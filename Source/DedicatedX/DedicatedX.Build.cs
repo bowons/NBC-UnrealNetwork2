@@ -19,5 +19,9 @@ public class DedicatedX : ModuleRules
 		// PrivateDependencyModuleNames.Add("OnlineSubsystem");
 
 		// To include OnlineSubsystemSteam, add it to the plugins section in your uproject file with the Enabled attribute set to true
+		PublicIncludePaths.AddRange(new string[]
+		{
+			"DedicatedX",
+		});
 	}
 }
