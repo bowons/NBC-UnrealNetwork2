@@ -7,5 +7,5 @@
 
 ADXGameStateBase::ADXGameStateBase()
 {
-	DX_LOG_NET(LogDXNet, Log, TEXT(""));	
+	// DX_LOG_NET(LogDXNet, Log, TEXT(""));
 }

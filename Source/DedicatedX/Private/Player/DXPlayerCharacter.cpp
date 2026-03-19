@@ -33,7 +33,7 @@ ADXPlayerCharacter::ADXPlayerCharacter()
 	Camera->bUsePawnControlRotation = false;
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	
-	DX_LOG_NET(LogDXNet, Log, TEXT(""));
+	// DX_LOG_NET(LogDXNet, Log, TEXT(""));
 }
 
 void ADXPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -68,16 +68,16 @@ void ADXPlayerCharacter::BeginPlay()
 
 void ADXPlayerCharacter::PossessedBy(AController* NewController)
 {
-	DX_LOG_NET(LogDXNet, Log, TEXT("Begin"));
+	// DX_LOG_NET(LogDXNet, Log, TEXT("Begin"));
 
 	AActor* OwnerActor = GetOwner();
 	if (IsValid(OwnerActor) == true)
 	{
-		DX_LOG_NET(LogDXNet, Log, TEXT("OwnerActor Name: %s"), *OwnerActor->GetName());
+		// DX_LOG_NET(LogDXNet, Log, TEXT("OwnerActor Name: %s"), *OwnerActor->GetName());
 	}
 	else
 	{
-		DX_LOG_NET(LogDXNet, Log, TEXT("There is no OwnerActor."));
+		// DX_LOG_NET(LogDXNet, Log, TEXT("There is no OwnerActor."));
 	}
 	
 	Super::PossessedBy(NewController);
@@ -85,42 +85,42 @@ void ADXPlayerCharacter::PossessedBy(AController* NewController)
 	OwnerActor = GetOwner();
 	if (IsValid(OwnerActor) == true)
 	{
-		DX_LOG_NET(LogDXNet, Log, TEXT("OwnerActor Name: %s"), *OwnerActor->GetName());
+		// DX_LOG_NET(LogDXNet, Log, TEXT("OwnerActor Name: %s"), *OwnerActor->GetName());
 	}
 	else
 	{
-		DX_LOG_NET(LogDXNet, Log, TEXT("There is no OwnerActor."));
+		// DX_LOG_NET(LogDXNet, Log, TEXT("There is no OwnerActor."));
 	}
 
-	DX_LOG_NET(LogDXNet, Log, TEXT("End"));
+	// DX_LOG_NET(LogDXNet, Log, TEXT("End"));
 }
 
 void ADXPlayerCharacter::OnRep_Owner()
 {
-	DX_LOG_NET(LogDXNet, Log, TEXT("Begin"));
+	// DX_LOG_NET(LogDXNet, Log, TEXT("Begin"));
 
 	Super::OnRep_Owner();
 	
 	AActor* OwnerActor = GetOwner();
 	if (IsValid(OwnerActor) == true)
 	{
-		DX_LOG_NET(LogDXNet, Log, TEXT("OwnerActor Name: %s"), *OwnerActor->GetName());
+		// DX_LOG_NET(LogDXNet, Log, TEXT("OwnerActor Name: %s"), *OwnerActor->GetName());
 	}
 	else
 	{
-		DX_LOG_NET(LogDXNet, Log, TEXT("There is no OwnerActor."));
+		// DX_LOG_NET(LogDXNet, Log, TEXT("There is no OwnerActor."));
 	}
 	
-	DX_LOG_NET(LogDXNet, Log, TEXT("End"));
+	// DX_LOG_NET(LogDXNet, Log, TEXT("End"));
 }
 
 void ADXPlayerCharacter::PostNetInit()
 {
-	DX_LOG_NET(LogDXNet, Log, TEXT("Begin"));
+	// DX_LOG_NET(LogDXNet, Log, TEXT("Begin"));
 	
 	Super::PostNetInit();
 	
-	DX_LOG_NET(LogDXNet, Log, TEXT("End"));
+	// DX_LOG_NET(LogDXNet, Log, TEXT("End"));
 }
 
 void ADXPlayerCharacter::HandleMoveInput(const FInputActionValue& InValue)
