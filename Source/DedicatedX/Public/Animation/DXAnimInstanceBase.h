@@ -21,6 +21,10 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 	
 protected:
+	UFUNCTION()
+	void AnimNotify_CheckMeleeAttack();
+	
+protected:
 	UPROPERTY()
 	TObjectPtr<ADXPlayerCharacter> OwnerCharacter;
 	

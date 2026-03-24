@@ -7,6 +7,9 @@
 #include "InputActionValue.h"
 #include "DXPlayerCharacter.generated.h"
 
+class UUW_HPText;
+class UDXStatusComponent;
+class UDXTextWidgetComponent;
 class UCameraComponent;
 class USpringArmComponent;
 class UInputAction;
@@ -44,6 +47,13 @@ public:
 	FORCEINLINE USpringArmComponent* GetSpringArm() const { return SpringArm; }
 	FORCEINLINE UCameraComponent* GetCamera() const { return Camera; }
 	
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="DXPlayerCharacter|Components")
+	TObjectPtr<UDXStatusComponent> StatusComponent;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="DXPlayerCharacter|Components")
+	TObjectPtr<UDXTextWidgetComponent> HPTextWidgetComponent;
+	
 #pragma endregion DXPlayerCharacter Components
 	
 #pragma region Input
@@ -55,6 +65,7 @@ private:
 	void HandleMoveInput(const FInputActionValue& InValue);
 	void HandleLookInput(const FInputActionValue& InValue);
 	void HandleLandMineInput(const FInputActionValue& InValue);
+	void HandleMeleeAtackInput(const FInputActionValue& InValue);
 
 	UFUNCTION(Server, Unreliable) // 한 두번 정도는 씹혀도 되기 때문.
 	void ServerRPCUpdateAimValue(const float& InAimPitchValue);
@@ -75,6 +86,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="DXPlayerCharacter|Input")
 	TObjectPtr<UInputAction> LandMineAction;
 	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="DXPlayerCharacter|Input")
+	TObjectPtr<UInputAction> MeleeAttackAction;
+	
 	UPROPERTY(Replicated)
 	float CurrentAimPitch = 0.f;
 
@@ -93,5 +107,55 @@ private:
 	void ServerRPCSpawnLandMine();
 	
 #pragma endregion LandMine
+
+#pragma region Attack
+	
+public:
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	void CheckMeleeAttackHit();
+
+private:
+	void DrawDebugMeleeAttack(const FColor& DrawColor, FVector TraceStart, FVector TraceEnd, FVector Forward);
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerRPCMeleeAttack(float InStartMeleeAttackTime);
+	
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastRPCMeleeAttack();
+	
+	UFUNCTION(Server, Reliable, WithValidation)
+	void ServerRPCPerformMeleeHit(ACharacter* InDamagedCharacters, float InCheckTime);
+	
+	UFUNCTION(Client, Unreliable)
+	void ClientRPCPlayMeleeAttackMontage(ADXPlayerCharacter* InTargetCharacter);
+	
+	UFUNCTION()
+	void OnRep_CanAttack();
+	
+	void PlayMeleeAttackMontage() const;
+	
+protected:
+	//bool bCanAttack;
+	UPROPERTY(ReplicatedUsing = OnRep_CanAttack)
+	uint8 bCanAttack : 1;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TObjectPtr<UAnimMontage> MeleeAttackMontage;
+
+	float MeleeAttackMontagePlayTime;
+
+	float LastStartMeleeAttackTime;
+	float MeleeAttackTimeDifference;
+	
+	float MinAllowedTimeForMeleeAttack;
+	
+#pragma endregion Attack
+	
+#pragma region Widget
+public:
+	void SetHPTextWidget(UUW_HPText* InHPTextWidget);
+	void TakeBuff(float InBuffValue);
+	
+#pragma endregion Widget
 	
 };

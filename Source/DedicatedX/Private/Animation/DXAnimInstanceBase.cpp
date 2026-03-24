@@ -33,3 +33,11 @@ void UDXAnimInstanceBase::NativeUpdateAnimation(float DeltaSeconds)
 	
 	AimPitch = OwnerCharacter->GetCurrentAimPitch();
 }
+
+void UDXAnimInstanceBase::AnimNotify_CheckMeleeAttack()
+{
+	if (IsValid(OwnerCharacter) == true)
+	{
+		OwnerCharacter->CheckMeleeAttackHit();
+	}
+}
