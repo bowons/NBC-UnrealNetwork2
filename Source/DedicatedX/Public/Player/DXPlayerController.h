@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "DXPlayerController.generated.h"
 
+class UUW_GameResult;
 /**
  * 
  */
@@ -22,8 +23,27 @@ public:
 	virtual void OnActorChannelOpen(FInBunch& InBunch, UNetConnection* Connection) override;
 	virtual void PostInitializeComponents() override;
 	virtual void BeginPlay() override;
-	
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void OnPossess(APawn* InPawn) override;
 	
 #pragma endregion APlayerController Override
+	
+public:
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite)
+	FText NotificationText;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<UUserWidget> NotificationTextUIClass;
+
+	void OnCharacterDead();
+	
+	UFUNCTION(Client, Reliable)
+	void ClientRPCShowGameResultWidget(int32 InRanking);
+	
+	UFUNCTION(Client, Reliable)
+    void ClientRPCReturnToTitle();
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<UUW_GameResult> GameResultUIClass;
+
 };

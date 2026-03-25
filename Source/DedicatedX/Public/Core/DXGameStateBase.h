@@ -9,6 +9,16 @@
 /**
  * 
  */
+UENUM(BlueprintType)
+enum class EMatchState : uint8
+{
+	None,
+	Waiting,
+	Playing,
+	Ending,
+	End
+};
+
 UCLASS()
 class DEDICATEDX_API ADXGameStateBase : public AGameStateBase
 {
@@ -18,5 +28,14 @@ class DEDICATEDX_API ADXGameStateBase : public AGameStateBase
 public:
 	ADXGameStateBase();
 	
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+public:
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
+	int32 AlivePlayerControllerCount = 0;
+
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
+	EMatchState MatchState = EMatchState::Waiting;
+
 #pragma endregion AGameStateBase Override
 };

@@ -20,6 +20,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
+#include "Player/DXPlayerController.h"
 #include "UI/UW_HPText.h"
 
 
@@ -87,6 +88,8 @@ void ADXPlayerCharacter::BeginPlay()
 	
 		EILPS->AddMappingContext(InputMappingContext, 0);
 	}
+	
+	StatusComponent->OnOutOfCurrentHP.AddUObject(this, &ThisClass::OnDeath);
 	
 	if (IsValid(MeleeAttackMontage) == true)
 	{
@@ -439,6 +442,15 @@ void ADXPlayerCharacter::PlayMeleeAttackMontage() const
 	{
 		AnimInstance->StopAllMontages(0.f);
 		AnimInstance->Montage_Play(MeleeAttackMontage);		
+	}
+}
+
+void ADXPlayerCharacter::OnDeath()
+{
+	ADXPlayerController* PlayerController = GetController<ADXPlayerController>();
+	if (IsValid(PlayerController) == true && HasAuthority() == true)
+	{
+		PlayerController->OnCharacterDead();
 	}
 }
 

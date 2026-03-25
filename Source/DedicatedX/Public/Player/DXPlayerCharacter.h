@@ -134,6 +134,9 @@ private:
 	
 	void PlayMeleeAttackMontage() const;
 	
+	UFUNCTION()
+	void OnDeath();
+	
 protected:
 	//bool bCanAttack;
 	UPROPERTY(ReplicatedUsing = OnRep_CanAttack)
